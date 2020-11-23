@@ -1,7 +1,46 @@
 import React from 'react'
 import { Link } from 'react-router-dom'
 
-const Navbar = () => {
+const AuthButtons = () => {
+  return (
+    <div class="buttons">
+      <Link to="/signup">
+        <a class="button is-primary mr-2">
+          <strong>Sign up</strong>
+        </a>
+      </Link>
+      <Link to="/login">
+        <a class="button is-light">
+          Log in
+      </a>
+      </Link>
+    </div>
+  )
+}
+
+const UserInfo = ({ email }) => {
+  return (
+    <div class="navbar-item has-dropdown is-hoverable">
+      <a class="navbar-link">
+        {email}
+      </a>
+
+      <div class="navbar-dropdown">
+        <Link to="/profile">
+          <a class="navbar-item">
+            Profile
+        </a>
+        </Link>
+        <hr class="navbar-divider" />
+        <a class="navbar-item">
+          Sign Out
+        </a>
+      </div>
+    </div>
+  )
+}
+
+const Navbar = ({ user }) => {
 
   return (
     <nav className="navbar" role="navigation">
@@ -17,18 +56,11 @@ const Navbar = () => {
 
       <div class="navbar-end">
         <div class="navbar-item">
-          <div class="buttons">
-            <Link to="/signup">
-              <a class="button is-primary mr-2">
-                <strong>Sign up</strong>
-              </a>
-            </Link>
-            <Link to="/login">
-              <a class="button is-light">
-                Log in
-            </a>
-            </Link>
-          </div>
+          {user ? (
+            <UserInfo email={user.email} />
+          ) : (
+            <AuthButtons />
+          )}
         </div>
       </div>
     </nav>
