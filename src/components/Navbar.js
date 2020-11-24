@@ -18,7 +18,7 @@ const AuthButtons = () => {
   )
 }
 
-const UserInfo = ({ email }) => {
+const UserInfo = ({ email, signout }) => {
   return (
     <div class="navbar-item has-dropdown is-hoverable">
       <a class="navbar-link">
@@ -29,10 +29,10 @@ const UserInfo = ({ email }) => {
         <Link to="/profile">
           <a class="navbar-item">
             Profile
-        </a>
+          </a>
         </Link>
         <hr class="navbar-divider" />
-        <a class="navbar-item">
+        <a class="navbar-item" onClick={signout}>
           Sign Out
         </a>
       </div>
@@ -40,7 +40,7 @@ const UserInfo = ({ email }) => {
   )
 }
 
-const Navbar = ({ user }) => {
+const Navbar = ({ user, handleSignOut }) => {
 
   return (
     <nav className="navbar" role="navigation">
@@ -57,7 +57,7 @@ const Navbar = ({ user }) => {
       <div class="navbar-end">
         <div class="navbar-item">
           {user ? (
-            <UserInfo email={user.email} />
+            <UserInfo email={user.email} signout={handleSignOut} />
           ) : (
             <AuthButtons />
           )}
