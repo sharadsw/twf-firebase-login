@@ -2,12 +2,20 @@ import firebase from 'firebase/app'
 
 import 'firebase/analytics'
 import 'firebase/auth'
+import 'firebase/database'
 
 const init = (config) => {
   if (!firebase.apps.length) {
     firebase.initializeApp(config);
   }
   firebase.analytics();
+  firebase.auth().setPersistence(firebase.auth.Auth.Persistence.SESSION)
+    .then(() =>{
+      console.log("Persistence set");
+    })
+    .catch(err => {
+      console.log(err)
+    })
 }
 
 const createUser = (email, password) => {
@@ -19,9 +27,29 @@ const login = (email, password) => {
 }
 
 const getUser = () => {
-  firebase.auth().onAuthStateChanged(user => {
-    return user ? user : null
+  return firebase.auth.currentUser
+}
+
+const signout = () => {
+  return firebase.auth().signOut()
+}
+
+const writeUserData = (userId, fname, lname, place) => {
+  firebase.database().ref('users/' + userId).set({
+    fname: fname,
+    lname: lname,
+    place: place
   })
 }
 
-export default { init, createUser, login, getUser }
+const readUserData = (userId) => {
+  return firebase.database().ref('/users/' + userId).once('value').then((snapshot) => {
+    return {
+      fname: (snapshot.val() && snapshot.val().fname) || '',
+      lname: (snapshot.val() && snapshot.val().lname) || '',
+      place: (snapshot.val() && snapshot.val().place) || ''
+    }
+  })
+}
+
+export default { init, createUser, login, getUser, signout, writeUserData, readUserData }
